@@ -31,11 +31,12 @@ class _TodoListState extends State<TodoList> {
           itemBuilder: (context, i) {
             final item = _list![i];
             return Dismissible(
-              key: Key(item.toString()),
+              key: Key(item.id!.toString()),
               onDismissed: (direction) async {
-                _list?.remove(item);
                 await deleteTodo(item.id!);
-                updateTodoList();
+                setState(() {
+                  _list?.removeAt(i);
+                });
               },
               child: ListTile(
                 title: Text(_list![i].note!),
