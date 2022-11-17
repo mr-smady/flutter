@@ -1,8 +1,5 @@
-import 'dart:convert';
-
 import 'package:flutter/material.dart';
 import 'package:todo/main.dart';
-import 'package:http/http.dart' as http;
 
 import 'models/todo.dart';
 
@@ -50,17 +47,14 @@ class _TodoListState extends State<TodoList> {
           },
         ),
         floatingActionButton: FloatingActionButton(
-          onPressed: () async {
-            var url = Uri.https('jsonplaceholder.typicode.com', 'posts');
-            var response = await http.post(url,
-                body: jsonEncode({
-                  "userId": 1,
-                  "title":
-                      "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
-                  "body":
-                      "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
-                }));
-            print(response.statusCode);
+          onPressed: () {
+            insert(
+              Todo(
+                note: 'Test 1',
+                creationDate: DateTime.now(),
+              ),
+            );
+            updateTodoList();
           },
           child: const Icon(
             Icons.add,
