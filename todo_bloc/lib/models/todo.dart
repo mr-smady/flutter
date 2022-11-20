@@ -1,11 +1,11 @@
 import 'package:equatable/equatable.dart';
 
 class Todo extends Equatable {
-  int? id;
-  String? note;
-  DateTime? creationDate;
+  final int? id;
+  final String? note;
+  final DateTime? creationDate;
 
-  Todo({this.id, this.note, this.creationDate});
+  const Todo({this.id, this.note, this.creationDate});
 
   Map<String, dynamic> toMap() {
     return {

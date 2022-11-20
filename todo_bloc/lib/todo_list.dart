@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_bloc/bloc/todo_bloc.dart';
-import 'models/todo.dart';
+import 'package:todo_bloc/models/todo.dart';
+import 'package:todo_bloc/todo_form.dart';
 
 class TodoList extends StatefulWidget {
   const TodoList({super.key});
@@ -21,7 +23,7 @@ class _TodoListState extends State<TodoList> {
   Widget build(BuildContext context) => Scaffold(
         body: BlocBuilder<TodoBloc, TodoState>(
           builder: (context, state) {
-            final list = state is TodoUpdated ? state.list : [];
+            final list = state is TodoUpdated ? state.list : <Todo>[];
             return ListView.builder(
               itemCount: list.length,
               itemBuilder: (context, i) {
@@ -34,9 +36,19 @@ class _TodoListState extends State<TodoList> {
                         );
                   },
                   child: ListTile(
-                    title: Text(list[i].note!),
-                    subtitle: Text(list[i].creationDate!.toString(),
+                    title: Text(item.note!),
+                    subtitle: Text(DateFormat.yMd().format(item.creationDate!),
                         textAlign: TextAlign.end),
+                    trailing: const Icon(Icons.keyboard_arrow_right_sharp),
+                    onTap: () {
+                      Navigator.of(context).push(
+                        MaterialPageRoute(
+                          builder: (context) => TodoForm(
+                            todo: item,
+                          ),
+                        ),
+                      );
+                    },
                   ),
                 );
               },
@@ -45,14 +57,11 @@ class _TodoListState extends State<TodoList> {
         ),
         floatingActionButton: FloatingActionButton(
           onPressed: () {
-            context.read<TodoBloc>().add(
-                  TodoAddEvent(
-                    todo: Todo(
-                      note: 'Test 1',
-                      creationDate: DateTime.now(),
-                    ),
-                  ),
-                );
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (context) => const TodoForm(),
+              ),
+            );
           },
           child: const Icon(
             Icons.add,

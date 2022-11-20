@@ -16,6 +16,8 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
         await _add(emit, event.todo);
       } else if (event is TodoDeleteEvent) {
         await _delete(emit, event.id);
+      } else if (event is TodoUpdateEvent) {
+        await _update(emit, event.todo);
       }
     });
   }
@@ -33,6 +35,12 @@ class TodoBloc extends Bloc<TodoEvent, TodoState> {
 
   _delete(Emitter<TodoState> emit, int id) async {
     await deleteTodo(id);
+    final list = await todoList();
+    emit(TodoUpdated(list: list));
+  }
+
+  _update(Emitter<TodoState> emit, Todo todo) async {
+    await update(todo);
     final list = await todoList();
     emit(TodoUpdated(list: list));
   }
